@@ -94,8 +94,58 @@ Una solución podría ser agregar un método abstracto a la superclase "Coche", 
 ## Interface segregation principle
 Indica de que "las clases no deberían verse forzados a depender de interfaces que no utilizan". Esto se refiere principalmente a que, cuando tenemos varias clases que dependen de la implementación de una interfaz, y algunas de ellas no implementan la totalidad de los métodos de dicha interfaz, no deberían ser forzadas a ello. En lugar de tener que implementar dichos métodos, lo ideal sería "segregar" la interfaz en dos o más interfaces, para que las clases resagadas sólo implementen los métodos que utilizan partiendo de una nueva interfaz.
 
+Un ejemplo de esto se puede encontrar en la siguiente ruta: [coa-api/src/main/java/edu/uday/coa/repository/MateriaRepository.java]
+En donde se crea la clase "MateriaRepository.java" para implementar la interfaz JpaRepository, en donde se cumple el principio dado que el objetivo de las clases contenidas en los paquetes "repository" tienen el objetivo de implementar la interfaz JpaRepository de la dependencia correspondiente para utilizar los métodos de acceso y modificación a la base de datos, esto como parte del entorno Spring Boot.
+
+	package edu.uday.coa.repository;
+	import edu.uday.coa.entity.Materia;
+	import org.springframework.data.jpa.repository.JpaRepository;
+	
+	public interface MateriaRepository extends JpaRepository<Materia, Long> {
+	}
+
+
 ## Dependency inversion principle
 Indica que las dependencias deben estar en las abstracciones, no en las concreciones, es decir:
 
 * Los módulos de alto nivel no deberían depender de módulos de bajo nivel. Ambos deberían depender de abstracciones.
 * Las abstracciones no deberían depender de detalles. Los detalles deberían depender de abstracciones.
+
+Para el ejemplo de este principio, se tienen dos clases.
+
+La primera es llamada "LightBulb.java":
+
+	public class LightBulb {
+	    public void turnOn() {
+	        System.out.println("LightBulb: Bulb turned on...");
+	    }
+	    public void turnOff() {
+	        System.out.println("LightBulb: Bulb turned off...");
+	    }
+	}
+
+El segundo es llamado "ElectricPowerSwitch.java"
+
+	public class ElectricPowerSwitch {
+	    public LightBulb lightBulb;
+	    public boolean on;
+	    public ElectricPowerSwitch(LightBulb lightBulb) {
+	        this.lightBulb = lightBulb;
+	        this.on = false;
+	    }
+	    public boolean isOn() {
+	        return this.on;
+	    }
+	    public void press(){
+	        boolean checkOn = isOn();
+	        if (checkOn) {
+	            lightBulb.turnOff();
+	            this.on = false;
+	        } else {
+	            lightBulb.turnOn();
+	            this.on = true;
+	        }
+	    }
+	}
+
+Como se puede ver en la clase "ElectricPowerSwitch.java", nuestra clase de alto nivel depende de la clase de bajo nivel "LightBulb.java". Sin embargo, el comportamiento de un switch no debería depender de una bombilla de luz. Este podría apagar y encender otros aparatos, independientemente del comportamiento de la bombilla. En dado caso a que querramos agregar nuevos dispositivos que puedan ser encendidos y apagados por nuestra clase ElectricPowerSwitch, tendríamos que ir modificando nuestra clase por cada dispositivo agregado, lo que indicaría un pobre diseño en nuestra clase java.
