@@ -11,6 +11,8 @@ Los principios SOLID son 5 y son los siguientes:
 ## Single responsibility principle
 Indica que una clase debería presentar una sola responsabilidad, es decir, no debería contener múltiples responsabilidades, puesto que el principio indica que el modificar una de ellas conllevará a la eventual modificación del resto de responsabilidades.
 
+[coa-api/src/main/java/edu/uday/coa/entity/Materia.java]
+
 ## Open/closed principle
 Indica que las clases, módulos, funciones, deberían de estar "abiertos para su extensión, pero cerrados para su modificación". Esto se refiere principalmente a que la forma en la que se codifica la lógica interna de los métodos y de las clases debería de estar diseñado para no necesitar ser modificado cada vez que se necesiten agregar funciones o características alrededor de la clase. 
 
