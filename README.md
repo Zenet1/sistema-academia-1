@@ -11,10 +11,34 @@ Los principios SOLID son 5 y son los siguientes:
 ## Single responsibility principle
 Indica que una clase debería presentar una sola responsabilidad, es decir, no debería contener múltiples responsabilidades, puesto que el principio indica que el modificar una de ellas conllevará a la eventual modificación del resto de responsabilidades.
 
-[coa-api/src/main/java/edu/uday/coa/entity/Materia.java]
+Un ejemplo de esto se encuentra en el archivo: [coa-api/src/main/java/edu/uday/coa/entity/Materia.java]
+En este siguiente fragmento de código se puede ver la clase "Materia.java", la cual sólo contiene los métodos para acceder a los atributos de una entidad llamada Materia (incluidas como parte de las etiquetas pertenecientes a una dependencia).
+
+	@Entity
+	@Table(name = "materias")
+	@Data
+	@NoArgsConstructor
+	public class Materia {
+	    @Id
+	    @Column(name ="id")
+	    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "materia_seq")
+	    @SequenceGenerator(name = "materia_seq", sequenceName = "materia_seq", initialValue = 1, allocationSize = 1)
+	    private Long id;
+	    @Column(name = "clave_materia")
+	    private String claveMateria;
+	    @Column(name ="nombre")
+	    private String nombreMateria;
+	    @JsonIgnore
+	    @JsonProperty(value = "OtroNombreDelPlanDeEstudios")
+	    @OneToMany(fetch = FetchType.LAZY, mappedBy = "materia")
+	    @ToString.Exclude
+	    private List<PlanEstudio> planEstudios;
+	}
 
 ## Open/closed principle
 Indica que las clases, módulos, funciones, deberían de estar "abiertos para su extensión, pero cerrados para su modificación". Esto se refiere principalmente a que la forma en la que se codifica la lógica interna de los métodos y de las clases debería de estar diseñado para no necesitar ser modificado cada vez que se necesiten agregar funciones o características alrededor de la clase. 
+
+
 
 ## Liskov sunstitution principle
 Declara que "...una subclase debe ser sustituible por su superclase, y si al hacer esto, el programa falla, estaremos violando este principio".
