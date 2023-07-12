@@ -38,7 +38,37 @@ En este siguiente fragmento de código se puede ver la clase "Materia.java", la 
 ## Open/closed principle
 Indica que las clases, módulos, funciones, deberían de estar "abiertos para su extensión, pero cerrados para su modificación". Esto se refiere principalmente a que la forma en la que se codifica la lógica interna de los métodos y de las clases debería de estar diseñado para no necesitar ser modificado cada vez que se necesiten agregar funciones o características alrededor de la clase. 
 
+Un ejemplo de este principio se encuentra en la ruta: [coa-api/src/main/java/edu/uday/coa/service/MateriaService.java]
+La clase "MateriaService.java" únicamente utiliza los métodos implementados de la interfaz "materiaRepository" para crear las operaciones básicas CRUD de la entidad "Materia". Los métodos están simplificados de tal manera que, si se deseara incluir una extensión de dichos métodos, no sería necesario modificar los ya existentes para realizarlo.
 
+	@Service
+	@Log4j2
+	public class MateriaService {
+	    @Autowired
+	    private MateriaRepository materiaRepository;
+	
+	    public Materia createMateria(Materia materia){
+	        log.info("crea Materia: "+materia.toString());
+	        return materiaRepository.save(materia);
+	    }
+	
+	    public Materia updateMateria(Materia Materia){
+	        log.info("actualiza Materia: "+Materia.toString());
+	        return materiaRepository.save(Materia);
+	    }
+	
+	    public List<Materia> getAllMaterias() throws Exception{
+	        List<Materia> materiaes = materiaRepository.findAll();
+	        if(materiaes.isEmpty()){
+	            throw new COAException("no se encontraron datos");
+	        }
+	        return  materiaes;
+	    }
+	
+	    public void deleteMateria(Long id){
+	        materiaRepository.deleteById(id);
+	    }
+	}
 
 ## Liskov sunstitution principle
 Declara que "...una subclase debe ser sustituible por su superclase, y si al hacer esto, el programa falla, estaremos violando este principio".
